@@ -3,12 +3,9 @@ import { LitElement, html } from "@polymer/lit-element";
 import "@polymer/paper-icon-button";
 import "@polymer/iron-iconset-svg";
 import "@polymer/iron-icon";
-import "@polymer/paper-dropdown-menu/paper-dropdown-menu.js";
-import "@polymer/paper-listbox";
-import "@polymer/paper-item/paper-item.js";
+import "@polymer/paper-input/paper-input.js";
 import "ht-image";
 import "ht-user-avatar";
-
 class HTElementsCartItem extends LitElement {
   _render({ data }) {
     return html`
@@ -35,20 +32,19 @@ class HTElementsCartItem extends LitElement {
             overflow: hidden;
         }
 
-      ht-user-avatar {
+        ht-user-avatar {
           margin:0 4px;
         }
 
-        paper-item {
-            cursor:pointer;
+        paper-input {
+            font-size: 14px;
+            width:40px;
+            --paper-input-container: { padding: 0;};
+            --paper-input-container-input: { font-size: 14px; };
         }
 
         paper-icon-button {
             width:40px;
-        }
-
-        paper-dropdown-menu {
-            width: 50px;
         }
 
     #container {
@@ -122,6 +118,12 @@ class HTElementsCartItem extends LitElement {
           grid-template-columns: 1fr;
           padding: 16px 0;
         }
+
+        #container > * {
+            display:flex;
+            padding-top: 16px;
+            align-items:flex-start;
+        }
       }
     </style>
     <iron-iconset-svg size="24" name="ht-elements-cart-item">
@@ -169,31 +171,14 @@ class HTElementsCartItem extends LitElement {
             $${data.price}
         </div>
         <div id="quantity">
-            <paper-dropdown-menu label="Кол-во"  always-float-label no-animations on-iron-select=${e => {
-              this._quantityChange(e);
-            }}>
-                <paper-listbox slot="dropdown-content" class="dropdown-content" attr-for-selected="value" value="${
-                  data.quantity
-                }" setSort=${this._setSort()}>
-                    <paper-item value="1">1</paper-item>
-                    <paper-item value="2">2</paper-item>
-                    <paper-item value="3">3</paper-item>
-                    <paper-item value="4">4</paper-item>
-                    <paper-item value="5">5</paper-item>
-                    <paper-item value="6">6</paper-item>
-                    <paper-item value="7">7</paper-item>
-                    <paper-item value="8">8</paper-item>
-                    <paper-item value="9">9</paper-item>
-                    <paper-item value="10">10</paper-item>
-                    <paper-item value="11">11</paper-item>
-                    <paper-item value="12">12</paper-item>
-                </paper-listbox>
-            </paper-dropdown-menu>
+           <paper-input id="name" label="Кол-во" always-float-label allowed-pattern="^[0-9]" char-counter maxlength="3" on-value-changed=${_ => {
+             this._quantityChange();
+           }} value$=${data.quantity}></paper-input>
         </div>
         <div id="total">$${data.price.toFixed(2) * data.quantity}</div>
         </div>
         <div id="close">
-            <paper-icon-button class="delete-button" icon="ht-elements-cart-item:close" on-click="${() =>
+            <paper-icon-button class="delete-button" icon="ht-elements-cart-item:close" on-click="${_ =>
               this._removeItem()}">
             </paper-icon-button>
         </div>
@@ -209,25 +194,59 @@ class HTElementsCartItem extends LitElement {
 
   static get properties() {
     return {
-      data: Object
+      data: Object,
+      timeoutID: Number
     };
+  }
+
+  get input() {
+    return this.shadowRoot.querySelector("paper-input");
   }
 
   constructor() {
     super();
+    this.initialized = false;
   }
 
-  _setSort(parameters) {
-    // if (this.listbox === null) return;
-    // let sort = this.parameters.sort;
-    // if (sort === undefined) {
-    //   this.listbox.selected = "";
-    // } else {
-    //   this.listbox.selected = sort;
-    // }
+  _quantityChange() {
+    if (!this.initialized) {
+      this.initialized = true;
+      return;
+    }
+    if (this.timeoutID !== undefined) window.clearTimeout(this.timeoutID);
+    this.timeoutID = setTimeout(_ => {
+      let quantity = +this.input.value;
+      if (quantity === 0) quantity = 1;
+      let data = this.data;
+      this.dispatchEvent(
+        new CustomEvent("change-item-quantity-in-cart", {
+          bubbles: true,
+          composed: true,
+          detail: {
+            cartId: data.cartId,
+            itemId: data.itemData.itemId,
+            licensetypeId: data.licensetypeId,
+            quantity: quantity
+          }
+        })
+      );
+    }, 1500);
   }
 
-  _quantityChange() {}
+  _removeItem() {
+    let data = this.data;
+    this.dispatchEvent(
+      new CustomEvent("remove-item-from-cart", {
+        bubbles: true,
+        composed: true,
+        detail: {
+          cartId: data.cartId,
+          itemId: data.itemData.itemId,
+          licensetypeId: data.licensetypeId
+        }
+      })
+    );
+  }
 }
 
 customElements.define(HTElementsCartItem.is, HTElementsCartItem);

@@ -11,9 +11,7 @@
     "@polymer/lit-element": "^0.5.1",
     "@polymer/paper-button": "^3.0.0-pre.17",
     "@polymer/paper-icon-button": "^3.0.0-pre.17",
-    "@polymer/paper-dropdown-menu": "^3.0.0-pre.17",
-    "@polymer/paper-item": "^3.0.0-pre.17",
-    "@polymer/paper-listbox": "^3.0.0-pre.17",
+    "@polymer/paper-input": "^3.0.0-pre.17",
     "ht-image": "git+https://github.com/maksimyurkov/ht-image.git",
     "ht-user-avatar": "git+https://github.com/maksimyurkov/ht-user-avatar.git"
   }

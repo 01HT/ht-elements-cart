@@ -7,7 +7,7 @@ import "./ht-elements-cart-item.js";
 import "./ht-elements-cart-total.js";
 
 class HTElementsCart extends LitElement {
-  _render({ items, total }) {
+  _render({ items, total, cartId }) {
     return html`
     <style>
       :host {
@@ -70,6 +70,11 @@ class HTElementsCart extends LitElement {
     this.items = [];
   }
 
+  set data(data) {
+    this.cartId = data;
+    this._refresh(this.cartId);
+  }
+
   _handleCartData(cartData) {
     let result = {
       total: 0,
@@ -83,6 +88,7 @@ class HTElementsCart extends LitElement {
         result.total += data.quantity * data.price;
         result.items.push({
           itemData: cartDataItems[itemId].itemData,
+          cartId: this.cartId,
           licensetypeId: licensetypeId,
           name: data.name,
           quantity: data.quantity,
@@ -93,13 +99,7 @@ class HTElementsCart extends LitElement {
     return result;
   }
 
-  async refresh(cartId) {
-    console.log(cartId);
-    // let cartId = this.cartId;
-    if (cartId === null) {
-      this.items = [];
-      return;
-    }
+  async _refresh(cartId) {
     let snapshot = await window.firebase
       .firestore()
       .collection("carts")
