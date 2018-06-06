@@ -46,7 +46,7 @@ class HTElementsCartTotal extends LitElement {
 
     <div id="container">
         <div id="info"><span id="label">Всего </span><span id="total">$${data}</span></div>
-        <paper-button raised>Перейти к оплате</paper-button>
+        <paper-button raised>Оформить заказ</paper-button>
     </div>
 `;
   }

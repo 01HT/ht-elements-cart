@@ -1,13 +1,14 @@
 "use strict";
 import { LitElement, html } from "@polymer/lit-element";
 import { repeat } from "lit-html/lib/repeat.js";
-import "@polymer/paper-button";
+import "@polymer/paper-spinner/paper-spinner.js";
 
+import "./ht-elements-cart-empty.js";
 import "./ht-elements-cart-item.js";
 import "./ht-elements-cart-total.js";
 
 class HTElementsCart extends LitElement {
-  _render({ items, total, cartId }) {
+  _render({ items, total, fullPageLoading }) {
     return html`
     <style>
       :host {
@@ -16,7 +17,20 @@ class HTElementsCart extends LitElement {
           box-sizing: border-box;
       }
 
+      paper-spinner {
+          --paper-spinner-stroke-width: 4px;
+          margin-top:64px;
+          width:64px;
+          height:64px;
+        }
+
       #container {
+        display:flex;
+        justify-content:center;
+      }
+
+      #cart-container {
+        width:100%;
         display:grid;
         grid-template-columns: 1fr 270px;
         grid-gap: 32px;
@@ -30,25 +44,34 @@ class HTElementsCart extends LitElement {
       }
 
       @media (max-width: 1000px) {
-        #container{
+        #cart-container{
           grid-template-columns: 1fr;
         }
       }
+
+      [hidden],  #cart-container[hidden]  {
+        display:none;
+      }
     </style>
     <div id="container">
-      <section id="main">
-        <h1>Корзина</h1>
-        <div id="list">
-          ${repeat(
-            items,
-            item =>
-              html`<ht-elements-cart-item data=${item}></ht-elements-cart-item>`
-          )}
-        </div>
-      </section>
-      <section id="sidebar">
-          <ht-elements-cart-total data=${total}></ht-elements-cart-total>
-      </section>
+      <paper-spinner active hidden?=${!fullPageLoading}></paper-spinner>
+      <ht-elements-cart-empty hidden?=${fullPageLoading ||
+        (!fullPageLoading && items.length !== 0)}></ht-elements-cart-empty>
+      <div id="cart-container" hidden?=${fullPageLoading || items.length === 0}>
+        <section id="main">
+          <h1>Корзина</h1>
+          <div id="list">
+            ${repeat(
+              items,
+              item =>
+                html`<ht-elements-cart-item options=${item}></ht-elements-cart-item>`
+            )}
+          </div>
+        </section>
+        <section id="sidebar">
+            <ht-elements-cart-total data=${total}></ht-elements-cart-total>
+        </section>
+      </div>
     </div>
 `;
   }
@@ -61,18 +84,16 @@ class HTElementsCart extends LitElement {
     return {
       items: Array,
       cartId: String,
-      total: Number
+      total: Number,
+      fullPageLoading: Boolean
     };
   }
 
   constructor() {
     super();
     this.items = [];
-  }
-
-  set data(data) {
-    this.cartId = data;
-    this._refresh(this.cartId);
+    this.fullPageLoading = true;
+    this.lastUpdate = new Date();
   }
 
   _handleCartData(cartData) {
@@ -99,16 +120,28 @@ class HTElementsCart extends LitElement {
     return result;
   }
 
-  async _refresh(cartId) {
+  async refresh(cartId, fullPageLoading) {
+    if (cartId === undefined || cartId === null) {
+      this.items = [];
+      this.fullPageLoading = false;
+      this.lastUpdate = new Date();
+      return;
+    }
+    if (fullPageLoading) this.fullPageLoading = true;
+    this.cartId = cartId;
+    let currentDate = new Date();
     let snapshot = await window.firebase
       .firestore()
       .collection("carts")
       .doc(cartId)
       .get();
     let cartData = snapshot.data();
-    let handledData = await this._handleCartData(cartData);
-    this.items = handledData.items;
-    this.total = handledData.total;
+    if (currentDate > this.lastUpdate) {
+      let handledData = await this._handleCartData(cartData);
+      this.items = handledData.items;
+      this.total = handledData.total;
+      this.fullPageLoading = false;
+    }
   }
 }
 

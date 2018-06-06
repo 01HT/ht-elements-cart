@@ -7,7 +7,7 @@ import "@polymer/paper-input/paper-input.js";
 import "ht-image";
 import "ht-user-avatar";
 class HTElementsCartItem extends LitElement {
-  _render({ data }) {
+  _render({ data, deleteSpinner, quantitySpinner }) {
     return html`
     <style>
     :host {
@@ -125,6 +125,10 @@ class HTElementsCartItem extends LitElement {
             align-items:flex-start;
         }
       }
+
+      [hidden] {
+          display:none;
+      }
     </style>
     <iron-iconset-svg size="24" name="ht-elements-cart-item">
         <svg>
@@ -171,15 +175,17 @@ class HTElementsCartItem extends LitElement {
             $${data.price}
         </div>
         <div id="quantity">
-           <paper-input id="name" label="Кол-во" always-float-label allowed-pattern="^[0-9]" char-counter maxlength="3" on-value-changed=${_ => {
+           <paper-spinner active hidden?=${!quantitySpinner}></paper-spinner>
+           <paper-input hidden?=${quantitySpinner} id="name" label="Кол-во" always-float-label allowed-pattern="^[0-9]" char-counter maxlength="3" on-value-changed=${_ => {
              this._quantityChange();
-           }} value$=${data.quantity}></paper-input>
+           }} value$=${+data.quantity}></paper-input>
         </div>
         <div id="total">$${data.price.toFixed(2) * data.quantity}</div>
         </div>
         <div id="close">
-            <paper-icon-button class="delete-button" icon="ht-elements-cart-item:close" on-click="${_ =>
-              this._removeItem()}">
+            <paper-spinner active hidden?=${!deleteSpinner}></paper-spinner>
+            <paper-icon-button  hidden?=${deleteSpinner} class="delete-button" icon="ht-elements-cart-item:close" on-click=${_ =>
+             this._removeItem()}>
             </paper-icon-button>
         </div>
     </div>`
@@ -195,7 +201,9 @@ class HTElementsCartItem extends LitElement {
   static get properties() {
     return {
       data: Object,
-      timeoutID: Number
+      deleteSpinner: Boolean,
+      quantitySpinner: Boolean,
+      options: Object
     };
   }
 
@@ -203,9 +211,16 @@ class HTElementsCartItem extends LitElement {
     return this.shadowRoot.querySelector("paper-input");
   }
 
+  set options(data) {
+    this.data = data;
+    this.deleteSpinner = false;
+    this.quantitySpinner = false;
+  }
+
   constructor() {
     super();
     this.initialized = false;
+    this.timeoutID;
   }
 
   _quantityChange() {
@@ -214,9 +229,14 @@ class HTElementsCartItem extends LitElement {
       return;
     }
     if (this.timeoutID !== undefined) window.clearTimeout(this.timeoutID);
+    this._changeItemQuantity();
+  }
+
+  _changeItemQuantity() {
     this.timeoutID = setTimeout(_ => {
       let quantity = +this.input.value;
       if (quantity === 0) quantity = 1;
+      this.quantitySpinner = true;
       let data = this.data;
       this.dispatchEvent(
         new CustomEvent("change-item-quantity-in-cart", {
@@ -230,11 +250,12 @@ class HTElementsCartItem extends LitElement {
           }
         })
       );
-    }, 1500);
+    }, 800);
   }
 
   _removeItem() {
     let data = this.data;
+    this.deleteSpinner = true;
     this.dispatchEvent(
       new CustomEvent("remove-item-from-cart", {
         bubbles: true,
