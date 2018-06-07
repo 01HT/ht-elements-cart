@@ -8,7 +8,7 @@ import "./ht-elements-cart-item.js";
 import "./ht-elements-cart-total.js";
 
 class HTElementsCart extends LitElement {
-  _render({ items, total, fullPageLoading }) {
+  _render({ items, total, fullPageLoading, signedIn }) {
     return html`
     <style>
       :host {
@@ -69,7 +69,7 @@ class HTElementsCart extends LitElement {
           </div>
         </section>
         <section id="sidebar">
-            <ht-elements-cart-total data=${total}></ht-elements-cart-total>
+            <ht-elements-cart-total data=${total} signedIn=${signedIn}></ht-elements-cart-total>
         </section>
       </div>
     </div>
@@ -85,7 +85,8 @@ class HTElementsCart extends LitElement {
       items: Array,
       cartId: String,
       total: Number,
-      fullPageLoading: Boolean
+      fullPageLoading: Boolean,
+      signedIn: Boolean
     };
   }
 
