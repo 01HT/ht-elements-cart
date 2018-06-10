@@ -1,6 +1,8 @@
 "use strict";
 import { LitElement, html } from "@polymer/lit-element";
 import "@polymer/paper-button";
+import "@polymer/iron-iconset-svg";
+import "@polymer/iron-icon";
 
 class HTElementsCartEmpty extends LitElement {
   _render({ data }) {
