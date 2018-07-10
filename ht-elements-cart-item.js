@@ -4,8 +4,8 @@ import "@polymer/paper-icon-button";
 import "@polymer/iron-iconset-svg";
 import "@polymer/iron-icon";
 import "@polymer/paper-input/paper-input.js";
-import "ht-image";
-import "ht-user-avatar";
+import "@01ht/ht-image";
+import "@01ht/ht-user-avatar";
 class HTElementsCartItem extends LitElement {
   _render({ data, deleteSpinner, quantitySpinner }) {
     return html`
