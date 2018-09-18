@@ -4,10 +4,13 @@ import "@polymer/paper-icon-button";
 import "@polymer/iron-iconset-svg";
 import "@polymer/iron-icon";
 import "@polymer/paper-input/paper-input.js";
+import "@01ht/ht-spinner";
 import "@01ht/ht-image";
 import "@01ht/ht-user-avatar";
+
 class HTElementsCartItem extends LitElement {
-  _render({ data, deleteSpinner, quantitySpinner }) {
+  render() {
+    const { data, deleteSpinner, quantitySpinner } = this;
     return html`
     <style>
     :host {
@@ -142,17 +145,21 @@ class HTElementsCartItem extends LitElement {
     </iron-iconset-svg>
 
      ${
-       data && data.itemData && data.itemData.usersData
+       data && data.itemData && data.itemData.authorData
          ? html`
          <div id="container">
     <a id="image" href="/item/${data.itemData.nameInURL}/${
              data.itemData.itemId
            }">
-        <ht-image placeholder="https://storage.googleapis.com/api-01-ht.appspot.com/items/${
-          data.itemData.itemId
-        }/preview-60w.jpg" image="https://storage.googleapis.com/api-01-ht.appspot.com/items/${
-             data.itemData.itemId
-           }/preview-480w.jpg" size="16x9"></ht-image>
+           <ht-image placeholder=${
+             window.cloudinaryURL
+           }/image/upload/c_scale,f_auto,w_60/v${data.itemData.image.version}/${
+             data.itemData.image.public_id
+           }.jpg image=${
+             window.cloudinaryURL
+           }/image/upload/c_scale,f_auto,w_480/v${
+             data.itemData.image.version
+           }/${data.itemData.image.public_id}.jpg size="16x9"></ht-image>
     </a>
     <div id="info">
         <div id="item-info">
@@ -160,11 +167,11 @@ class HTElementsCartItem extends LitElement {
              data.itemData.itemId
            }">${data.itemData.name}</a>
             <div id="author">от <ht-user-avatar data=${
-              data.itemData.usersData
-            } size="24" verifiedSize$=${8}></ht-user-avatar><a href="/user/${
-             data.itemData.usersData.nickname
-           }/${data.itemData.usersData.userId}">${
-             data.itemData.usersData.displayName
+              data.itemData.authorData
+            } size="24" verifiedSize=${8}></ht-user-avatar><a href="/${
+             data.itemData.authorData.isOrg ? "organization" : "user"
+           }/${data.itemData.authorData.uid}">${
+             data.itemData.authorData.displayName
            }</a>
             </div>
         </div>
@@ -175,16 +182,16 @@ class HTElementsCartItem extends LitElement {
             $${data.price}
         </div>
         <div id="quantity">
-           <paper-spinner active hidden?=${!quantitySpinner}></paper-spinner>
-           <paper-input hidden?=${quantitySpinner} id="name" label="Кол-во" always-float-label allowed-pattern="^[0-9]" char-counter maxlength="3" on-value-changed=${_ => {
+           <ht-spinner icon-button ?hidden=${!quantitySpinner}></ht-spinner>
+           <paper-input ?hidden=${quantitySpinner} id="name" label="Кол-во" always-float-label allowed-pattern="^[0-9]" char-counter maxlength="3" @value-changed=${_ => {
              this._quantityChange();
-           }} value$=${+data.quantity}></paper-input>
+           }} value=${+data.quantity}></paper-input>
         </div>
         <div id="total">$${data.price.toFixed(2) * data.quantity}</div>
         </div>
         <div id="close">
-            <paper-spinner active hidden?=${!deleteSpinner}></paper-spinner>
-            <paper-icon-button  hidden?=${deleteSpinner} class="delete-button" icon="ht-elements-cart-item:close" on-click=${_ =>
+            <ht-spinner icon-button ?hidden=${!deleteSpinner}></ht-spinner>
+            <paper-icon-button  ?hidden=${deleteSpinner} class="delete-button" icon="ht-elements-cart-item:close" @click=${_ =>
              this._removeItem()}>
             </paper-icon-button>
         </div>
@@ -200,10 +207,10 @@ class HTElementsCartItem extends LitElement {
 
   static get properties() {
     return {
-      data: Object,
-      deleteSpinner: Boolean,
-      quantitySpinner: Boolean,
-      options: Object
+      data: { type: Object },
+      deleteSpinner: { type: Boolean },
+      quantitySpinner: { type: Boolean },
+      options: { type: Object }
     };
   }
 

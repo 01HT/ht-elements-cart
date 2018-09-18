@@ -5,7 +5,7 @@ import "@polymer/iron-iconset-svg";
 import "@polymer/iron-icon";
 
 class HTElementsCartEmpty extends LitElement {
-  _render({ data }) {
+  render() {
     return html`
     <style>
         :host {
@@ -65,7 +65,7 @@ class HTElementsCartEmpty extends LitElement {
         <div id="text">Ваша корзина пуста</div>
         <div id="sub-text">
           <!--<p>Прежде чем приступить к оформлению заказа, вы должны добавить некоторые товары в корзину.</p>-->
-          <p>На странице «Каталог» вы найдете много интересных продуктов.</p>
+          <p>Найти продукты вы можете на странице «Каталог»</p>
         </div>
         <a href="/catalog">
         <paper-button raised>Перейти в каталог</paper-button>
@@ -77,10 +77,6 @@ class HTElementsCartEmpty extends LitElement {
 
   static get is() {
     return "ht-elements-cart-empty";
-  }
-
-  static get properties() {
-    return {};
   }
 }
 

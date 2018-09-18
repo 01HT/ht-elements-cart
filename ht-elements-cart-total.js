@@ -3,7 +3,8 @@ import { LitElement, html } from "@polymer/lit-element";
 import "@polymer/paper-button";
 
 class HTElementsCartTotal extends LitElement {
-  _render({ data, signedIn }) {
+  render() {
+    const { signedIn, data } = this;
     return html`
     <style>
         :host {
@@ -13,8 +14,7 @@ class HTElementsCartTotal extends LitElement {
         }
 
         paper-button {
-            margin:0;
-            margin-top: 16px;
+            margin:16px 0 0 0;
         }
 
         paper-button:not([disabled]) {
@@ -47,16 +47,16 @@ class HTElementsCartTotal extends LitElement {
         }
 
         [hidden] {
-            display:none !important;
+            display:none;
         }
     </style>
 
     <div id="container">
         <div id="info"><span id="label">Всего </span><span id="total">$${data}</span></div>
-        <paper-button raised hidden?=${signedIn} on-click=${_ => {
+        <paper-button raised ?hidden=${signedIn} @click=${_ => {
       this._openLoginWindow();
     }}>Войти</paper-button>
-        <paper-button raised disabled?=${!signedIn}>Перейти к оплате</paper-button>
+        <paper-button raised ?disabled=${!signedIn}>Перейти к оплате</paper-button>
     </div>
 `;
   }
@@ -67,8 +67,8 @@ class HTElementsCartTotal extends LitElement {
 
   static get properties() {
     return {
-      data: Number,
-      signedIn: Boolean
+      data: { type: Number },
+      signedIn: { type: Boolean }
     };
   }
 

@@ -1,14 +1,15 @@
 "use strict";
 import { LitElement, html } from "@polymer/lit-element";
-import { repeat } from "lit-html/lib/repeat.js";
-import "@polymer/paper-spinner/paper-spinner.js";
+import { repeat } from "lit-html/directives/repeat.js";
+import "@01ht/ht-spinner";
 
 import "./ht-elements-cart-empty.js";
 import "./ht-elements-cart-item.js";
 import "./ht-elements-cart-total.js";
 
 class HTElementsCart extends LitElement {
-  _render({ items, total, fullPageLoading, signedIn }) {
+  render() {
+    const { fullPageLoading, items, signedIn, total } = this;
     return html`
     <style>
       :host {
@@ -16,13 +17,6 @@ class HTElementsCart extends LitElement {
           position: relative;
           box-sizing: border-box;
       }
-
-      paper-spinner {
-          --paper-spinner-stroke-width: 4px;
-          margin-top:64px;
-          width:64px;
-          height:64px;
-        }
 
       #container {
         display:flex;
@@ -54,22 +48,24 @@ class HTElementsCart extends LitElement {
       }
     </style>
     <div id="container">
-      <paper-spinner active hidden?=${!fullPageLoading}></paper-spinner>
-      <ht-elements-cart-empty hidden?=${fullPageLoading ||
+      <ht-spinner page ?hidden=${!fullPageLoading}></ht-spinner>
+      <ht-elements-cart-empty ?hidden=${fullPageLoading ||
         (!fullPageLoading && items.length !== 0)}></ht-elements-cart-empty>
-      <div id="cart-container" hidden?=${fullPageLoading || items.length === 0}>
+      <div id="cart-container" ?hidden=${fullPageLoading || items.length === 0}>
         <section id="main">
           <h1>Корзина</h1>
           <div id="list">
             ${repeat(
               items,
               item =>
-                html`<ht-elements-cart-item options=${item}></ht-elements-cart-item>`
+                html`<ht-elements-cart-item .options=${item}></ht-elements-cart-item>`
             )}
           </div>
         </section>
         <section id="sidebar">
-            <ht-elements-cart-total data=${total} signedIn=${signedIn}></ht-elements-cart-total>
+            <ht-elements-cart-total .data=${
+              .total
+            } .signedIn=${signedIn}></ht-elements-cart-total>
         </section>
       </div>
     </div>
@@ -82,11 +78,11 @@ class HTElementsCart extends LitElement {
 
   static get properties() {
     return {
-      items: Array,
-      cartId: String,
-      total: Number,
-      fullPageLoading: Boolean,
-      signedIn: Boolean
+      items: { type: Array },
+      cartId: { type: String },
+      total: { type: Number },
+      fullPageLoading: { type: Boolean },
+      signedIn: { type: Boolean }
     };
   }
 

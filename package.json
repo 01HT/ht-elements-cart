@@ -1,18 +1,18 @@
 {
   "name": "@01ht/ht-elements-cart",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "main": "ht-elements-cart.js",
   "repository": "01ht/ht-elements-cart",
-  "author": "01ht Ltd",
+  "author": "01HT Ltd",
   "license": "UNLICENSED",
   "dependencies": {
-    "@polymer/paper-spinner": "^3.0.0-pre.17",
-    "@polymer/iron-icon": "^3.0.0-pre.17",
-    "@polymer/iron-iconset-svg": "^3.0.0-pre.17",
-    "@polymer/lit-element": "^0.5.1",
-    "@polymer/paper-button": "^3.0.0-pre.17",
-    "@polymer/paper-icon-button": "^3.0.0-pre.17",
-    "@polymer/paper-input": "^3.0.0-pre.17",
+    "@polymer/lit-element": "^0.6.1",
+    "@polymer/iron-icon": "^3.0.1",
+    "@polymer/iron-iconset-svg": "^3.0.1",
+    "@polymer/paper-button": "^3.0.1",
+    "@polymer/paper-icon-button": "^3.0.1",
+    "@polymer/paper-input": "^3.0.1",
+    "@01ht/ht-spinner": "^1.0.0",
     "@01ht/ht-image": "^1.0.0",
     "@01ht/ht-user-avatar": "^1.0.0"
   }
