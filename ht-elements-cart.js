@@ -9,8 +9,9 @@ import "./ht-elements-cart-total.js";
 
 class HTElementsCart extends LitElement {
   render() {
-    const { fullPageLoading, items, signedIn, total } = this;
+    const { items, signedIn, total, cartId } = this;
     return html`
+    ${SharedStyles}
     <style>
       :host {
           display: block;
@@ -37,7 +38,7 @@ class HTElementsCart extends LitElement {
         grid-template-columns: 1fr;
       }
 
-      @media (max-width: 1000px) {
+      @media (max-width: 930px) {
         #cart-container{
           grid-template-columns: 1fr;
         }
@@ -48,24 +49,21 @@ class HTElementsCart extends LitElement {
       }
     </style>
     <div id="container">
-      <ht-spinner page ?hidden=${!fullPageLoading}></ht-spinner>
-      <ht-elements-cart-empty ?hidden=${fullPageLoading ||
-        (!fullPageLoading && items.length !== 0)}></ht-elements-cart-empty>
-      <div id="cart-container" ?hidden=${fullPageLoading || items.length === 0}>
+      <ht-elements-cart-empty ?hidden=${items.length !==
+        0}></ht-elements-cart-empty>
+      <div id="cart-container" ?hidden=${items.length === 0}>
         <section id="main">
-          <h1>Корзина</h1>
+          <h1 class="mdc-typography--headline5">Корзина</h1>
           <div id="list">
             ${repeat(
               items,
               item =>
-                html`<ht-elements-cart-item .options=${item}></ht-elements-cart-item>`
+                html`<ht-elements-cart-item .options=${item} .cartId=${cartId}></ht-elements-cart-item>`
             )}
           </div>
         </section>
         <section id="sidebar">
-            <ht-elements-cart-total .data=${
-              total
-            } .signedIn=${signedIn}></ht-elements-cart-total>
+            <ht-elements-cart-total .data=${total} .signedIn=${signedIn}></ht-elements-cart-total>
         </section>
       </div>
     </div>
@@ -81,64 +79,8 @@ class HTElementsCart extends LitElement {
       items: { type: Array },
       cartId: { type: String },
       total: { type: Number },
-      fullPageLoading: { type: Boolean },
       signedIn: { type: Boolean }
     };
-  }
-
-  constructor() {
-    super();
-    this.items = [];
-    this.fullPageLoading = true;
-    this.lastUpdate = new Date();
-  }
-
-  _handleCartData(cartData) {
-    let result = {
-      total: 0,
-      items: []
-    };
-    let cartDataItems = cartData.items;
-    for (let itemId in cartDataItems) {
-      let subitems = cartDataItems[itemId].subitems;
-      for (let licensetypeId in subitems) {
-        let data = subitems[licensetypeId];
-        result.total += data.quantity * data.price;
-        result.items.push({
-          itemData: cartDataItems[itemId].itemData,
-          cartId: this.cartId,
-          licensetypeId: licensetypeId,
-          name: data.name,
-          quantity: data.quantity,
-          price: data.price
-        });
-      }
-    }
-    return result;
-  }
-
-  async refresh(cartId, fullPageLoading) {
-    if (cartId === undefined || cartId === null) {
-      this.items = [];
-      this.fullPageLoading = false;
-      this.lastUpdate = new Date();
-      return;
-    }
-    if (fullPageLoading) this.fullPageLoading = true;
-    this.cartId = cartId;
-    let currentDate = new Date();
-    let snapshot = await window.firebase
-      .firestore()
-      .collection("carts")
-      .doc(cartId)
-      .get();
-    let cartData = snapshot.data();
-    if (currentDate > this.lastUpdate) {
-      let handledData = await this._handleCartData(cartData);
-      this.items = handledData.items;
-      this.total = handledData.total;
-      this.fullPageLoading = false;
-    }
   }
 }
 

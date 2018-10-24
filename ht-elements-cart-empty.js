@@ -7,6 +7,7 @@ import "@polymer/iron-icon";
 class HTElementsCartEmpty extends LitElement {
   render() {
     return html`
+    ${SharedStyles}
     <style>
         :host {
             display: flex;
@@ -22,14 +23,11 @@ class HTElementsCartEmpty extends LitElement {
         iron-icon {
             width: 15vw;
             height: 15vw;
+            max-width: 164px;
+            max-height: 164px;
+            min-width: 128px;
+            min-height: 128px;
             color: #ddd;
-        }
-
-        paper-button {
-            background: var(--accent-color);
-            padding: 8px 16px;
-            color:#fff;
-            margin-top:8px;
         }
 
         #container {
@@ -41,12 +39,11 @@ class HTElementsCartEmpty extends LitElement {
 
         #text {
             margin-top:16px;
-            font-size: 24px;
-            font-weight: 600;
         }
 
-        p {
+        #sub {
             text-align:center;
+            margin: 8px 0 16px 0;
             font-size: 16px;
             color: var(--secondary-text-color);
         }
@@ -62,10 +59,10 @@ class HTElementsCartEmpty extends LitElement {
     </iron-iconset-svg>
     <div id="container">
         <iron-icon icon="ht-elements-cart-empty:shopping-cart"></iron-icon>
-        <div id="text">Ваша корзина пуста</div>
+        <div id="text" class="mdc-typography--headline5">Ваша корзина пуста</div>
         <div id="sub-text">
           <!--<p>Прежде чем приступить к оформлению заказа, вы должны добавить некоторые товары в корзину.</p>-->
-          <p>Найти продукты вы можете на странице «Каталог»</p>
+          <div id="sub">Найти продукты вы можете на странице «Каталог»</div>
         </div>
         <a href="/catalog">
         <paper-button raised>Перейти в каталог</paper-button>
