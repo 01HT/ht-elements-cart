@@ -63,7 +63,7 @@ class HTElementsCart extends LitElement {
           </div>
         </section>
         <section id="sidebar">
-            <ht-elements-cart-total .data=${total} .signedIn=${signedIn}></ht-elements-cart-total>
+            <ht-elements-cart-total .data=${total} .signedIn=${signedIn} .items=${items}></ht-elements-cart-total>
         </section>
       </div>
     </div>
