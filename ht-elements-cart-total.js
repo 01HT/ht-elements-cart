@@ -4,10 +4,15 @@ import "@polymer/paper-button";
 import "@polymer/paper-tooltip";
 import "@polymer/iron-iconset-svg";
 import "@polymer/iron-icon";
+import "@01ht/ht-spinner";
+import {
+  // callTestHTTPFunction
+  callFirebaseHTTPFunction
+} from "@01ht/ht-client-helper-functions";
 
 class HTElementsCartTotal extends LitElement {
   render() {
-    const { signedIn, data } = this;
+    const { signedIn, data, checkOutLoading } = this;
     return html`
     ${SharedStyles}
     <style>
@@ -67,6 +72,14 @@ class HTElementsCartTotal extends LitElement {
             font-size: 24px;
         }
 
+        ht-spinner {
+            margin-top: 16px;
+            display:flex;
+            height: 36px;
+            justify-content:center;
+            align-items:center;
+        }
+
         [hidden] {
             display:none;
         }
@@ -92,7 +105,17 @@ class HTElementsCartTotal extends LitElement {
         <paper-button raised ?hidden=${signedIn} @click=${_ => {
       this._openLoginWindow();
     }}>Войти</paper-button>
-        <paper-button raised ?disabled=${!signedIn}>Перейти к оплате</paper-button>
+
+
+    ${
+      checkOutLoading
+        ? html`<ht-spinner button></ht-spinner>`
+        : html`<paper-button raised ?disabled=${!signedIn} @click=${_ => {
+            this._checkOut();
+          }}>Перейти к оплате</paper-button>`
+    }
+
+        
     </div>
 `;
   }
@@ -104,7 +127,9 @@ class HTElementsCartTotal extends LitElement {
   static get properties() {
     return {
       data: { type: Number },
-      signedIn: { type: Boolean }
+      signedIn: { type: Boolean },
+      items: { type: Array },
+      checkOutLoading: { type: Boolean }
     };
   }
 
@@ -115,6 +140,57 @@ class HTElementsCartTotal extends LitElement {
         composed: true
       })
     );
+  }
+
+  async _checkOut() {
+    try {
+      this.checkOutLoading = true;
+      let body = {};
+      for (let item of this.items) {
+        body[item.itemData.itemId] = item.quantity;
+      }
+      let response = await callFirebaseHTTPFunction({
+        name: "httpsOrdersAddOrder",
+        authorization: true,
+        options: {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(body)
+        }
+      });
+      this.checkOutLoading = false;
+      if (response.error) return;
+      this.dispatchEvent(
+        new CustomEvent("clear-cart", {
+          bubbles: true,
+          composed: true
+        })
+      );
+      this.dispatchEvent(
+        new CustomEvent("update-pathname", {
+          bubbles: true,
+          composed: true,
+          detail: {
+            pathname: "/my-orders"
+          }
+        })
+      );
+    } catch (err) {
+      this.dispatchEvent(
+        new CustomEvent("show-toast", {
+          bubbles: true,
+          composed: true,
+          detail: {
+            text: err.message
+          }
+        })
+      );
+
+      this.checkOutLoading = false;
+      console.log(err.message);
+    }
   }
 }
 
