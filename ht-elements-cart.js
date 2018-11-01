@@ -1,7 +1,6 @@
 "use strict";
 import { LitElement, html } from "@polymer/lit-element";
 import { repeat } from "lit-html/directives/repeat.js";
-import "@01ht/ht-spinner";
 
 import "./ht-elements-cart-empty.js";
 import "./ht-elements-cart-item.js";
@@ -63,7 +62,7 @@ class HTElementsCart extends LitElement {
           </div>
         </section>
         <section id="sidebar">
-            <ht-elements-cart-total .data=${total} .signedIn=${signedIn} .items=${items}></ht-elements-cart-total>
+            <ht-elements-cart-total .data=${total} .signedIn=${signedIn}></ht-elements-cart-total>
         </section>
       </div>
     </div>
