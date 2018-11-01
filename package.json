@@ -15,7 +15,6 @@
     "@polymer/paper-input": "^3.0.1",
     "@01ht/ht-spinner": "01ht/ht-spinner",
     "@01ht/ht-image": "01ht/ht-image",
-    "@01ht/ht-user-avatar": "01ht/ht-user-avatar",
-    "@01ht/ht-client-helper-functions": "01ht/ht-client-helper-functions"
+    "@01ht/ht-user-avatar": "01ht/ht-user-avatar"
   }
 }
