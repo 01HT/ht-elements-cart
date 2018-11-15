@@ -4,10 +4,11 @@ import "@polymer/paper-button";
 import "@polymer/paper-tooltip";
 import "@polymer/iron-iconset-svg";
 import "@polymer/iron-icon";
+import "@01ht/ht-spinner";
 
 class HTElementsCartTotal extends LitElement {
   render() {
-    const { signedIn, data } = this;
+    const { signedIn, data, orderCreating } = this;
     return html`
     ${SharedStyles}
     <style>
@@ -25,6 +26,14 @@ class HTElementsCartTotal extends LitElement {
         iron-icon {
             color: var(--accent-color);
             margin-right: 4px;
+        }
+
+        ht-spinner {
+            display:flex;
+            margin-top: 16px;
+            height: 36px;
+            justify-content:center;
+            align-items:center;
         }
 
         #container {
@@ -94,23 +103,21 @@ class HTElementsCartTotal extends LitElement {
             <paper-tooltip>Предоставление права использования программ для ЭВМ, баз данных НДС не облагается согласно пп.26 п.2. ст. 149 НК РФ</paper-tooltip>
             <div id="text">Не облагается НДС</div>
         </div>
-        <paper-button raised ?hidden=${signedIn} @click=${_ => {
-      this._openLoginWindow();
-    }}>Войти</paper-button>
-
     ${
-      signedIn
-        ? html`<a href="/my-orders">
-        <paper-button raised @click=${_ => {
-          this._checkOut();
-        }}>Оплата</paper-button>
-        </a>`
-        : html`
-        <div id="disabled-container">
+      !signedIn
+        ? html`<paper-button raised @click=${_ => {
+            this._openLoginWindow();
+          }}>Войти</paper-button><div id="disabled-container">
             <paper-button raised disabled>Оплата</paper-button>
             <paper-tooltip>Для оплаты войдите в приложение</paper-tooltip>
-        </div>
-        `
+        </div>`
+        : html`${
+            orderCreating
+              ? html`<ht-spinner button></ht-spinner>`
+              : html`<paper-button raised @click=${_ => {
+                  this._checkOut();
+                }}>Оплата</paper-button>`
+          }`
     }
     </div>
 `;
@@ -124,7 +131,8 @@ class HTElementsCartTotal extends LitElement {
     return {
       data: { type: Number },
       signedIn: { type: Boolean },
-      items: { type: Array }
+      items: { type: Array },
+      orderCreating: { type: Boolean }
     };
   }
 

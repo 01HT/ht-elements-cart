@@ -60,7 +60,7 @@ class HTElementsCartItem extends LitElement {
         border-radius:3px;
         grid-gap:16px;
         display:grid;
-        grid-template-columns: 100px auto 48px;
+        grid-template-columns: 80px auto 48px;
         background: #fff;
         overflow:hidden;
         box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
