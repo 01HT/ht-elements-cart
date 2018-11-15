@@ -8,14 +8,14 @@ import "./ht-elements-cart-total.js";
 
 class HTElementsCart extends LitElement {
   render() {
-    const { items, signedIn, total, cartId } = this;
+    const { items, signedIn, total, cartId, orderCreating } = this;
     return html`
     ${SharedStyles}
     <style>
       :host {
-          display: block;
-          position: relative;
-          box-sizing: border-box;
+        display: block;
+        position: relative;
+        box-sizing: border-box;
       }
 
       #container {
@@ -62,7 +62,7 @@ class HTElementsCart extends LitElement {
           </div>
         </section>
         <section id="sidebar">
-            <ht-elements-cart-total .data=${total} .signedIn=${signedIn}></ht-elements-cart-total>
+            <ht-elements-cart-total .data=${total} .signedIn=${signedIn} .orderCreating=${orderCreating}></ht-elements-cart-total>
         </section>
       </div>
     </div>
@@ -78,7 +78,8 @@ class HTElementsCart extends LitElement {
       items: { type: Array },
       cartId: { type: String },
       total: { type: Number },
-      signedIn: { type: Boolean }
+      signedIn: { type: Boolean },
+      orderCreating: { type: Boolean }
     };
   }
 }
