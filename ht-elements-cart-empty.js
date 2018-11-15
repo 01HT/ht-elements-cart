@@ -62,10 +62,10 @@ class HTElementsCartEmpty extends LitElement {
         <div id="text" class="mdc-typography--headline5">Ваша корзина пуста</div>
         <div id="sub-text">
           <!--<p>Прежде чем приступить к оформлению заказа, вы должны добавить некоторые товары в корзину.</p>-->
-          <div id="sub">Найти продукты вы можете на странице «Каталог»</div>
+          <div id="sub">Выберите себе элементы в нашем каталоге</div>
         </div>
         <a href="/catalog">
-        <paper-button raised>Перейти в каталог</paper-button>
+        <paper-button raised>Каталог</paper-button>
         </a>
 
     </div>
