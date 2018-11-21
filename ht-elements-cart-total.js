@@ -150,7 +150,9 @@ class HTElementsCartTotal extends LitElement {
       new CustomEvent("create-order", {
         bubbles: true,
         composed: true,
-        ordertypeId: "v2m2Mq3clhUhyeex5Xkp"
+        detail: {
+          ordertypeId: "v2m2Mq3clhUhyeex5Xkp"
+        }
       })
     );
   }
