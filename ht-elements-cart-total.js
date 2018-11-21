@@ -149,7 +149,8 @@ class HTElementsCartTotal extends LitElement {
     this.dispatchEvent(
       new CustomEvent("create-order", {
         bubbles: true,
-        composed: true
+        composed: true,
+        ordertypeId: "v2m2Mq3clhUhyeex5Xkp"
       })
     );
   }
