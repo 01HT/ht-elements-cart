@@ -206,15 +206,15 @@ class HTElementsCartItem extends LitElement {
     <a id="image" href="/item/${data.itemData.nameInURL}/${
              data.itemData.itemId
            }">
-           <ht-image placeholder=${
+           <ht-image placeholder="${
              window.cloudinaryURL
            }/image/upload/c_scale,f_auto,w_60/v${data.itemData.image.version}/${
              data.itemData.image.public_id
-           }.jpg image=${
+           }.jpg" image="${
              window.cloudinaryURL
            }/image/upload/c_scale,f_auto,w_480/v${
              data.itemData.image.version
-           }/${data.itemData.image.public_id}.jpg size="16x9"></ht-image>
+           }/${data.itemData.image.public_id}.jpg" size="16x9"></ht-image>
     </a>
     <div id="info">
         <div id="item-info">
