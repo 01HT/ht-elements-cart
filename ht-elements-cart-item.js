@@ -204,7 +204,7 @@ class HTElementsCartItem extends LitElement {
          ? html`
          <div id="container">
     <a id="image" href="/item/${data.itemData.nameInURL}/${
-             data.itemData.itemId
+             data.itemData.itemNumber
            }">
            <ht-image placeholder="${
              window.cloudinaryURL
@@ -219,16 +219,17 @@ class HTElementsCartItem extends LitElement {
     <div id="info">
         <div id="item-info">
             <a id="name" href="/item/${data.itemData.nameInURL}/${
-             data.itemData.itemId
+             data.itemData.itemNumber
            }">${data.itemData.name}</a>
-          
             <div id="author">от <ht-user-avatar data=${
               data.itemData.authorData
             } size="24" verifiedSize=${8}></ht-user-avatar><a href="/${
              data.itemData.authorData.isOrg ? "organization" : "user"
-           }/${data.itemData.authorData.uid}">${
-             data.itemData.authorData.displayName
-           }</a>
+           }/${data.itemData.authorData.nameInURL}/${
+             data.itemData.authorData.isOrg
+               ? `${data.itemData.authorData.organizationNumber}`
+               : `${data.itemData.authorData.userNumber}`
+           }">${data.itemData.authorData.displayName}</a>
             </div>
              <div id="license-type">
               ${data.licensetypesData.name}
@@ -294,6 +295,7 @@ class HTElementsCartItem extends LitElement {
 
   set options(data) {
     this.data = data;
+    console.log(data);
     this.deleteSpinner = false;
     this.quantitySpinner = false;
   }
