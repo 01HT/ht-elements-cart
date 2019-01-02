@@ -295,7 +295,6 @@ class HTElementsCartItem extends LitElement {
 
   set options(data) {
     this.data = data;
-    console.log(data);
     this.deleteSpinner = false;
     this.quantitySpinner = false;
   }
