@@ -231,9 +231,11 @@ class HTElementsCartItem extends LitElement {
                : `${data.itemData.authorData.userNumber}`
            }">${data.itemData.authorData.displayName}</a>
             </div>
-             <div id="license-type">
+             <a id="license-type" href="https://github.com/01HT/elements-single-commercial-license/tree/v${
+               data.licensetypesData.version
+             }" target="_blank" rel="noopener">
               ${data.licensetypesData.name}
-            </div>
+            </a>
         </div>
         
         <div id="price">
