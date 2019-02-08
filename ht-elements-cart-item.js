@@ -1,5 +1,5 @@
 "use strict";
-import { LitElement, html } from "@polymer/lit-element";
+import { LitElement, html, css } from "lit-element";
 import "@polymer/paper-icon-button";
 import "@polymer/iron-iconset-svg";
 import "@polymer/iron-icon";
@@ -9,10 +9,7 @@ import "@01ht/ht-image";
 import "@01ht/ht-user-avatar";
 
 class HTElementsCartItem extends LitElement {
-  render() {
-    const { data, deleteSpinner, quantitySpinner } = this;
-    return html`
-    <style>
+  static styles = css`<style>
     :host {
         display: flex;
         position: relative;
@@ -185,7 +182,11 @@ class HTElementsCartItem extends LitElement {
       [hidden] {
           display:none;
       }
-    </style>
+    </style>`;
+
+  render() {
+    const { data, deleteSpinner, quantitySpinner } = this;
+    return html`
     <iron-iconset-svg size="24" name="ht-elements-cart-item">
         <svg>
             <defs>
@@ -221,9 +222,9 @@ class HTElementsCartItem extends LitElement {
             <a id="name" href="/item/${data.itemData.nameInURL}/${
              data.itemData.itemNumber
            }">${data.itemData.name}</a>
-            <div id="author">от <ht-user-avatar data=${
+            <div id="author">от <ht-user-avatar .data="${
               data.itemData.authorData
-            } size="24" verifiedSize=${8}></ht-user-avatar><a href="/${
+            }" size="24" .verifiedSize="${8}"></ht-user-avatar><a href="/${
              data.itemData.authorData.isOrg ? "organization" : "user"
            }/${data.itemData.authorData.nameInURL}/${
              data.itemData.authorData.isOrg
@@ -245,40 +246,38 @@ class HTElementsCartItem extends LitElement {
         <div id="quantity">
             <div class="title">Кол-во</div>
             <div id="quantity-actions">
-              <paper-icon-button  icon="ht-elements-cart-item:remove-circle-outline" @click=${_ =>
-                this._minusQuantity()}>
+              <paper-icon-button  icon="ht-elements-cart-item:remove-circle-outline" @click="${_ =>
+                this._minusQuantity()}">
             </paper-icon-button>
-              <paper-input id="quantity-number" id="name" no-label-float allowed-pattern="^[0-9]" maxlength="3" @keyup=${_ => {
+              <paper-input id="quantity-number" id="name" no-label-float allowed-pattern="^[0-9]" maxlength="3" @keyup="${_ => {
                 this._onInputKeyPress();
-              }} value=${+data.quantity}></paper-input>
-            <paper-icon-button icon="ht-elements-cart-item:add-circle-outline" @click=${_ =>
-              this._plusQuantity()}>
+              }}" value="${+data.quantity}"></paper-input>
+            <paper-icon-button icon="ht-elements-cart-item:add-circle-outline" @click="${
+              this._plusQuantity
+            }">
             </paper-icon-button>
           </div>
         </div>
 
         <div id="total">
           <div class="title">Сумма</div>
-          <ht-spinner icon-button ?hidden=${!quantitySpinner}></ht-spinner>
-          <div id="total-number" ?hidden=${quantitySpinner}>$${data.itemData.price.toFixed(
+          <ht-spinner icon-button ?hidden="${!quantitySpinner}"></ht-spinner>
+          <div id="total-number" ?hidden="${quantitySpinner}">$${data.itemData.price.toFixed(
              2
            ) * data.quantity}</div>
         </div>
         </div>
         <div id="close">
-            <ht-spinner icon-button ?hidden=${!deleteSpinner}></ht-spinner>
-            <paper-icon-button  ?hidden=${deleteSpinner} class="delete-button" icon="ht-elements-cart-item:close" @click=${_ =>
-             this._removeItem()}>
+            <ht-spinner icon-button ?hidden="${!deleteSpinner}"></ht-spinner>
+            <paper-icon-button  ?hidden="${deleteSpinner}" class="delete-button" icon="ht-elements-cart-item:close" @click="${
+             this._removeItem
+           }">
             </paper-icon-button>
         </div>
     </div>`
          : null
      }
 `;
-  }
-
-  static get is() {
-    return "ht-elements-cart-item";
   }
 
   static get properties() {
@@ -363,4 +362,4 @@ class HTElementsCartItem extends LitElement {
   }
 }
 
-customElements.define(HTElementsCartItem.is, HTElementsCartItem);
+customElements.define("ht-elements-cart-item", HTElementsCartItem);

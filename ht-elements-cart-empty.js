@@ -1,14 +1,13 @@
 "use strict";
-import { LitElement, html } from "@polymer/lit-element";
+import { LitElement, html, css } from "lit-element";
 import "@polymer/paper-button";
 import "@polymer/iron-iconset-svg";
 import "@polymer/iron-icon";
 
 class HTElementsCartEmpty extends LitElement {
-  render() {
-    return html`
-    ${SharedStyles}
-    <style>
+  static styles = [
+    window.SharedStyles,
+    css`<style>
         :host {
             display: flex;
             position: relative;
@@ -47,7 +46,11 @@ class HTElementsCartEmpty extends LitElement {
             font-size: 16px;
             color: var(--secondary-text-color);
         }
-    </style>
+    </style>`
+  ];
+
+  render() {
+    return html`
     <iron-iconset-svg size="24" name="ht-elements-cart-empty">
         <svg>
             <defs>
@@ -71,10 +74,6 @@ class HTElementsCartEmpty extends LitElement {
     </div>
 `;
   }
-
-  static get is() {
-    return "ht-elements-cart-empty";
-  }
 }
 
-customElements.define(HTElementsCartEmpty.is, HTElementsCartEmpty);
+customElements.define("ht-elements-cart-empty", HTElementsCartEmpty);

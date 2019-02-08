@@ -1,5 +1,5 @@
 "use strict";
-import { LitElement, html } from "@polymer/lit-element";
+import { LitElement, html, css } from "lit-element";
 import "@polymer/paper-button";
 import "@polymer/paper-tooltip";
 import "@polymer/iron-iconset-svg";
@@ -7,11 +7,9 @@ import "@polymer/iron-icon";
 import "@01ht/ht-spinner";
 
 class HTElementsCartTotal extends LitElement {
-  render() {
-    const { signedIn, data, orderCreating } = this;
-    return html`
-    ${SharedStyles}
-    <style>
+  static styles = [
+    window.SharedStyles,
+    css`<style>
         :host {
             display: flex;
             position: relative;
@@ -84,7 +82,12 @@ class HTElementsCartTotal extends LitElement {
         [hidden] {
             display:none;
         }
-    </style>
+    </style>`
+  ];
+
+  render() {
+    const { signedIn, data, orderCreating } = this;
+    return html`
     <iron-iconset-svg size="24" name="ht-elements-cart-total">
         <svg>
             <defs>
@@ -105,26 +108,22 @@ class HTElementsCartTotal extends LitElement {
         </div>
     ${
       !signedIn
-        ? html`<paper-button raised @click=${_ => {
-            this._openLoginWindow();
-          }}>Войти</paper-button><div id="disabled-container">
+        ? html`<paper-button raised @click="${
+            this._openLoginWindow
+          }">Войти</paper-button><div id="disabled-container">
             <paper-button raised disabled>Оплата</paper-button>
             <paper-tooltip>Для оплаты войдите в приложение</paper-tooltip>
         </div>`
         : html`${
             orderCreating
               ? html`<ht-spinner button></ht-spinner>`
-              : html`<paper-button raised @click=${_ => {
-                  this._checkOut();
-                }}>Оплата</paper-button>`
+              : html`<paper-button raised @click="${
+                  this._checkOut
+                }">Оплата</paper-button>`
           }`
     }
     </div>
 `;
-  }
-
-  static get is() {
-    return "ht-elements-cart-total";
   }
 
   static get properties() {
@@ -158,4 +157,4 @@ class HTElementsCartTotal extends LitElement {
   }
 }
 
-customElements.define(HTElementsCartTotal.is, HTElementsCartTotal);
+customElements.define("ht-elements-cart-total", HTElementsCartTotal);

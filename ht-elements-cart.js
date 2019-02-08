@@ -1,5 +1,5 @@
 "use strict";
-import { LitElement, html } from "@polymer/lit-element";
+import { LitElement, html, css } from "lit-element";
 import { repeat } from "lit-html/directives/repeat.js";
 
 import "./ht-elements-cart-empty.js";
@@ -7,11 +7,9 @@ import "./ht-elements-cart-item.js";
 import "./ht-elements-cart-total.js";
 
 class HTElementsCart extends LitElement {
-  render() {
-    const { items, signedIn, total, cartId, orderCreating } = this;
-    return html`
-    ${SharedStyles}
-    <style>
+  static styles = [
+    window.SharedStyles,
+    css`<style>
       :host {
         display: block;
         position: relative;
@@ -46,31 +44,32 @@ class HTElementsCart extends LitElement {
       [hidden],  #cart-container[hidden]  {
         display:none;
       }
-    </style>
+    </style>`
+  ];
+
+  render() {
+    const { items, signedIn, total, cartId, orderCreating } = this;
+    return html`
     <div id="container">
-      <ht-elements-cart-empty ?hidden=${items.length !==
-        0}></ht-elements-cart-empty>
-      <div id="cart-container" ?hidden=${items.length === 0}>
+      <ht-elements-cart-empty ?hidden="${items.length !==
+        0}"></ht-elements-cart-empty>
+      <div id="cart-container" ?hidden="${items.length === 0}">
         <section id="main">
           <h1 class="mdc-typography--headline5">Корзина</h1>
           <div id="list">
             ${repeat(
               items,
               item =>
-                html`<ht-elements-cart-item .options=${item} .cartId=${cartId}></ht-elements-cart-item>`
+                html`<ht-elements-cart-item .options="${item}" .cartId="${cartId}"></ht-elements-cart-item>`
             )}
           </div>
         </section>
         <section id="sidebar">
-            <ht-elements-cart-total .data=${total} .signedIn=${signedIn} .orderCreating=${orderCreating}></ht-elements-cart-total>
+            <ht-elements-cart-total .data="${total}" .signedIn="${signedIn}" .orderCreating="${orderCreating}"></ht-elements-cart-total>
         </section>
       </div>
     </div>
 `;
-  }
-
-  static get is() {
-    return "ht-elements-cart";
   }
 
   static get properties() {
@@ -84,4 +83,4 @@ class HTElementsCart extends LitElement {
   }
 }
 
-customElements.define(HTElementsCart.is, HTElementsCart);
+customElements.define("ht-elements-cart", HTElementsCart);
