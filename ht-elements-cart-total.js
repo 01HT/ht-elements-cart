@@ -6,84 +6,83 @@ import "@polymer/iron-iconset-svg";
 import "@polymer/iron-icon";
 import "@01ht/ht-spinner";
 
-class HTElementsCartTotal extends LitElement {
-  static styles = [
-    window.SharedStyles,
-    css`<style>
-        :host {
-            display: flex;
-            position: relative;
-            box-sizing: border-box;
-        }
+import { styles } from "@01ht/ht-theme/styles";
 
+class HTElementsCartTotal extends LitElement {
+  static get styles() {
+    return [
+      styles,
+      css`
         paper-button {
-            margin: 16px 0 0 0;
-            width: 100%;
+          margin: 16px 0 0 0;
+          width: 100%;
         }
 
         iron-icon {
-            color: var(--accent-color);
-            margin-right: 4px;
+          color: var(--accent-color);
+          margin-right: 4px;
         }
 
         ht-spinner {
-            display:flex;
-            margin-top: 16px;
-            height: 36px;
-            justify-content:center;
-            align-items:center;
+          display: flex;
+          margin-top: 16px;
+          height: 36px;
+          justify-content: center;
+          align-items: center;
         }
 
         #container {
-            display:flex;
-            width:100%;
-            padding: 24px;
-            flex-direction: column;
-            border-radius:3px;
-            box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
+          display: flex;
+          width: 100%;
+          padding: 24px;
+          flex-direction: column;
+          border-radius: 3px;
+          box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14),
+            0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
         }
 
         [disabled] {
-            background: #ccc;
+          background: #ccc;
         }
 
         #disabled-container {
-            position: relative;
+          position: relative;
         }
 
         #info {
-            display:flex;
-            justify-content: space-between;
-            align-items: center;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
         }
 
         #nds {
-            display: flex;
-            align-items: center;
-            margin-top: 8px;
-            line-height: 0;
-            position:relative;
+          display: flex;
+          align-items: center;
+          margin-top: 8px;
+          line-height: 0;
+          position: relative;
         }
-    
+
         #label {
-            font-weight: 500;
-            font-size: 18px;
+          font-weight: 500;
+          font-size: 18px;
         }
 
         #text {
-            color: var(--secondary-text-color);
-            font-size: 14px;
+          color: var(--secondary-text-color);
+          font-size: 14px;
         }
 
         #total {
-            font-size: 24px;
+          font-size: 24px;
         }
 
         [hidden] {
-            display:none;
+          display: none;
         }
-    </style>`
-  ];
+      `
+    ];
+  }
 
   render() {
     const { signedIn, data, orderCreating } = this;

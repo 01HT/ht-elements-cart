@@ -6,46 +6,45 @@ import "./ht-elements-cart-empty.js";
 import "./ht-elements-cart-item.js";
 import "./ht-elements-cart-total.js";
 
+import { styles } from "@01ht/ht-theme/styles";
+
 class HTElementsCart extends LitElement {
-  static styles = [
-    window.SharedStyles,
-    css`<style>
-      :host {
-        display: block;
-        position: relative;
-        box-sizing: border-box;
-      }
+  static get styles() {
+    return [
+      styles,
+      css`
+        #container {
+          display: flex;
+          justify-content: center;
+        }
 
-      #container {
-        display:flex;
-        justify-content:center;
-      }
+        #cart-container {
+          width: 100%;
+          display: grid;
+          grid-template-columns: 1fr 270px;
+          grid-gap: 32px;
+        }
 
-      #cart-container {
-        width:100%;
-        display:grid;
-        grid-template-columns: 1fr 270px;
-        grid-gap: 32px;
-      }
-
-      #list {
-        display: grid;
-        grid-gap: 16px;
-        margin-top:32px;
-        grid-template-columns: 1fr;
-      }
-
-      @media (max-width: 930px) {
-        #cart-container{
+        #list {
+          display: grid;
+          grid-gap: 16px;
+          margin-top: 32px;
           grid-template-columns: 1fr;
         }
-      }
 
-      [hidden],  #cart-container[hidden]  {
-        display:none;
-      }
-    </style>`
-  ];
+        @media (max-width: 930px) {
+          #cart-container {
+            grid-template-columns: 1fr;
+          }
+        }
+
+        [hidden],
+        #cart-container[hidden] {
+          display: none;
+        }
+      `
+    ];
+  }
 
   render() {
     const { items, signedIn, total, cartId, orderCreating } = this;

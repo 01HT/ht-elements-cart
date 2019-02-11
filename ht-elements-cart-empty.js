@@ -4,50 +4,54 @@ import "@polymer/paper-button";
 import "@polymer/iron-iconset-svg";
 import "@polymer/iron-icon";
 
+import { styles } from "@01ht/ht-theme/styles";
+
 class HTElementsCartEmpty extends LitElement {
-  static styles = [
-    window.SharedStyles,
-    css`<style>
+  static get styles() {
+    return [
+      styles,
+      css`
         :host {
-            display: flex;
-            position: relative;
-            box-sizing: border-box;
+          display: flex;
+          position: relative;
+          box-sizing: border-box;
         }
 
         a {
-            color:inherit;
-            text-decoration: none;
+          color: inherit;
+          text-decoration: none;
         }
 
         iron-icon {
-            width: 15vw;
-            height: 15vw;
-            max-width: 164px;
-            max-height: 164px;
-            min-width: 128px;
-            min-height: 128px;
-            color: #ddd;
+          width: 15vw;
+          height: 15vw;
+          max-width: 164px;
+          max-height: 164px;
+          min-width: 128px;
+          min-height: 128px;
+          color: #ddd;
         }
 
         #container {
-            display:flex;
-            align-items:center;
-            flex-direction:column;
-            margin-top:32px;
+          display: flex;
+          align-items: center;
+          flex-direction: column;
+          margin-top: 32px;
         }
 
         #text {
-            margin-top:16px;
+          margin-top: 16px;
         }
 
         #sub {
-            text-align:center;
-            margin: 8px 0 16px 0;
-            font-size: 16px;
-            color: var(--secondary-text-color);
+          text-align: center;
+          margin: 8px 0 16px 0;
+          font-size: 16px;
+          color: var(--secondary-text-color);
         }
-    </style>`
-  ];
+      `
+    ];
+  }
 
   render() {
     return html`
