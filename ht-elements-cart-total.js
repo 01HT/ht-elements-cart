@@ -34,6 +34,7 @@ class HTElementsCartTotal extends LitElement {
         #container {
           display: flex;
           width: 100%;
+          box-sizing: border-box;
           padding: 24px;
           flex-direction: column;
           border-radius: 3px;
