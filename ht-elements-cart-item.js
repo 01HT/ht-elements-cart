@@ -215,11 +215,11 @@ class HTElementsCartItem extends LitElement {
              data.itemData.itemNumber
            }">
            <ht-image placeholder="${
-             window.cloudinaryURL
+             window.appConfig.cloudinary.url
            }/image/upload/c_scale,f_auto,w_60/v${data.itemData.image.version}/${
              data.itemData.image.public_id
            }.jpg" image="${
-             window.cloudinaryURL
+             window.appConfig.cloudinary.url
            }/image/upload/c_scale,f_auto,w_480/v${
              data.itemData.image.version
            }/${data.itemData.image.public_id}.jpg" size="16x9"></ht-image>
